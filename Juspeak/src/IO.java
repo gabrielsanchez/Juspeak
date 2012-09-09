@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * CS-12J Asn 3
  * IO.java
  * Purpose: Input/Output Methods.
  *

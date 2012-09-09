@@ -18,7 +18,6 @@
 import java.util.ArrayList;
 
 /**
- * CS-12J Asn 3
  * SpearFile.java
  * Purpose: Object that contains partials.
  *

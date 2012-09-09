@@ -16,7 +16,6 @@
  */
 
 /**
- * CS-12J Asn 3
  * Point.java
  * Purpose: Object that contains partials.
  *

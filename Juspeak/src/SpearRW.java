@@ -16,7 +16,7 @@ public class SpearRW {
 		double amplitude;
 		
 		/*********************IO*********************/
-		Scanner in = new Scanner(new FileReader("cat1-partials.txt"));
+		Scanner in = new Scanner(new FileReader("partials.txt"));
 		BufferedWriter out = new BufferedWriter(new FileWriter("file.txt"));
 		/*********************IO*********************/
 		                   

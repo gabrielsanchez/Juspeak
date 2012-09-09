@@ -18,7 +18,6 @@
 import java.util.ArrayList;
 
 /**
- * CS-12J Asn 3
  * Partial.java
  * Purpose: Object that contains Points.
  *
