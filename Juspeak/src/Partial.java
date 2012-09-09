@@ -308,4 +308,46 @@ public class Partial{
 		return this.points.get(index);
 	}
 	
+	/**
+	 * Get an Array of the Frequencies in the Partial
+	 * @return frequencies
+	 */
+	public double[] getFrequencies(){
+		double[] frequencies = new double[numberOfPoints];
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			frequencies[i] = this.points.get(i).getFrequency();
+		}
+		
+		return frequencies;
+	}
+	
+	/**
+	 * Get an Array of the Amplitudes in the Partial
+	 * @return amplitudes
+	 */
+	public double[] getAmplitudes(){
+		double[] amplitudes = new double[numberOfPoints];
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			amplitudes[i] = this.points.get(i).getAmplitude();
+		}
+		
+		return amplitudes;
+	}
+	
+	/**
+	 * Get an Array of the Times in the Partial
+	 * @return times
+	 */
+	public double[] getTimes(){
+		double[] times = new double[numberOfPoints];
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			times[i] = this.points.get(i).getTime();
+		}
+		
+		return times;
+	}
+	
 }
