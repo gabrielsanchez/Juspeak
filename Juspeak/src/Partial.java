@@ -327,6 +327,7 @@ public class Partial{
 	 * @return amplitudes
 	 */
 	public double[] getAmplitudes(){
+		
 		double[] amplitudes = new double[numberOfPoints];
 		
 		for(int i = 0; i < numberOfPoints; i++){
@@ -341,6 +342,7 @@ public class Partial{
 	 * @return times
 	 */
 	public double[] getTimes(){
+		
 		double[] times = new double[numberOfPoints];
 		
 		for(int i = 0; i < numberOfPoints; i++){
@@ -348,6 +350,42 @@ public class Partial{
 		}
 		
 		return times;
+	}
+	
+	/**
+	 * Set new Frequencies to the current Partial.
+	 * @param frequencies
+	 */
+	public void setFrequencies(double[] frequencies){
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			this.points.get(i).setFrequency(frequencies[i]);
+		}
+		
+	}
+	
+	/**
+	 * Set new Amplitudes to the current Partial.
+	 * @param amplitudes
+	 */
+	public void setAmplitudes(double[] amplitudes){
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			this.points.get(i).setAmplitude(amplitudes[i]);
+		}
+		
+	}
+	
+	/**
+	 * Set new Times to the current Partial.
+	 * @param times
+	 */
+	public void setTimes(double[] times){
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			this.points.get(i).setTime(times[i]);
+		}
+		
 	}
 	
 }
