@@ -154,5 +154,158 @@ public class Partial{
 	 */
 	public void addPoint(Point p){
 		this.points.add(p);
-	}	
+		numberOfPoints++;
+	}
+	
+	/**
+	 * Remove a Point
+	 */
+	public void removePoint(){
+	// IMPLEMENT
+		numberOfPoints--;
+	}
+	
+	
+	/**
+	 * Gets the average of the frequencies in the Partial
+	 * @return average
+	 */
+	public double getAverageFrequency(){
+		double average = 0;
+
+		if(numberOfPoints<=0)
+			return 0;
+		
+		for(int i = 0; i < numberOfPoints; i++)
+			average += this.points.get(i).getFrequency();
+		
+		average = average/numberOfPoints;
+		
+		return average;
+	}
+	
+	/**
+	 * Gets the average of the amplitudes in the Partial
+	 * @return average
+	 */
+	public double getAverageAmplitude(){
+		double average = 0;
+
+		if(numberOfPoints<=0)
+			return 0;
+		
+		for(int i = 0; i < numberOfPoints; i++)
+			average += this.points.get(i).getAmplitude();
+		
+		average = average/numberOfPoints;
+		
+		return average;
+	}
+	
+	
+	/**
+	 * Gets the Max Frequency Value
+	 * @return Max
+	 */
+	public double getMaxFrequency(){
+		
+		double Max = 0;
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			if(this.points.get(i).getFrequency() > Max)
+				Max = this.points.get(i).getFrequency();
+		}
+		
+		return Max;
+	}
+	
+	/**
+	 * Gets the Point with the Max Frequency Value
+	 * @return point
+	 */
+	public Point getPointWithMaxFrequency(){
+		
+		double Max = 0;
+		int index = 0;
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			if(this.points.get(i).getFrequency() > Max){
+				Max = this.points.get(i).getFrequency();
+				index = i;
+			}
+		}
+		
+		return this.points.get(index);
+	}
+	
+	/**
+	 * Gets the Max Amplitude Value
+	 * @return Max
+	 */
+	public double getMaxAmplitude(){
+		
+		double Max = 0;
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			if(this.points.get(i).getAmplitude() > Max)
+				Max = this.points.get(i).getAmplitude();
+		}
+		
+		return Max;
+	}
+	
+	/**
+	 * Gets the Point with the Max Amplitude Value
+	 * @return point
+	 */
+	public Point getPointWithMaxAmplitude(){
+		
+		double Max = 0;
+		int index = 0;
+		
+		for(int i = 0; i < numberOfPoints; i++){
+			if(this.points.get(i).getAmplitude() > Max){
+				Max = this.points.get(i).getAmplitude();
+				index = i;
+			}
+		}
+		
+		return this.points.get(index);
+	}
+	
+	/**
+	 * Gets the Minimum Frequency Value
+	 * @return Min
+	 */
+	public double getMinFrequency(){
+		
+		double Min = this.points.get(0).getFrequency();
+		
+		for(int i = 1; i < numberOfPoints; i++){
+			if(this.points.get(i).getFrequency() < Min)
+				Min = this.points.get(i).getFrequency();
+		}
+		
+		return Min;
+	}
+	
+	/**
+	 * Gets the Point with the Min Frequency Value
+	 * @return point
+	 */
+	public Point getPointWithMinFrequency(){
+		
+		double Min = this.points.get(0).getFrequency();
+		int index = 0;
+		
+		for(int i = 1; i < numberOfPoints; i++){
+			if(this.points.get(i).getFrequency() < Min){
+				Min = this.points.get(i).getFrequency();
+				index = i;
+			}
+		}
+		
+		return this.points.get(index);
+	}
+	
 }
