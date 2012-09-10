@@ -154,7 +154,7 @@ public class Partial{
 	 */
 	public void addPoint(Point p){
 		this.points.add(p);
-		numberOfPoints++;
+		//numberOfPoints++;
 	}
 	
 	/**
@@ -385,6 +385,8 @@ public class Partial{
 		for(int i = 0; i < numberOfPoints; i++){
 			this.points.get(i).setTime(times[i]);
 		}
+		
+		//NEED TO RECALCULATE START AND END
 		
 	}
 	

@@ -20,6 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -61,9 +63,8 @@ public class IO{
 				double end = Double.parseDouble(in.next());
 				
 				Partial p = new Partial(partial, npoints, start, end);
-				
+
 				for(int j = 0; j < npoints; j++){
-					
 					double time = Double.parseDouble(in.next());
 					double frequency = Double.parseDouble(in.next());
 					double amplitude = Double.parseDouble(in.next());
@@ -93,30 +94,44 @@ public class IO{
 	 */
 	public void exportSpearFile(SpearFile sf, String output){
 		try{
+			Locale l = Locale.US;
 			
 			BufferedWriter out = new BufferedWriter(new FileWriter(output));
+
+			out.write("par-text-partials-format");
+			out.newLine();
+			out.write("point-type time frequency amplitude");
+			out.newLine();
+			out.write("partials-count " + sf.getNumberOfPartials());
+			out.newLine();
+			out.write("partials-data");
+			out.newLine();
 			
 			for(int i = 0; i < sf.getNumberOfPartials(); i++){
-				
-				sf.getPartials().get(i).getPartial();
-				sf.getPartials().get(i).getNumberOfPoints();
-				sf.getPartials().get(i).getStart();
-				sf.getPartials().get(i).getEnd();
-				
+
+				out.write(sf.getPartials().get(i).getPartial() + " ");
+				out.write(sf.getPartials().get(i).getNumberOfPoints() + " ");
+				out.write(String.format(l,"%.6f ",sf.getPartials().get(i).getStart()));
+				out.write(String.format(l,"%.6f",sf.getPartials().get(i).getEnd()));
+				out.newLine();
+	
 				for(int j = 0; j < sf.getPartials().get(i).getNumberOfPoints(); j++){
-					
-					sf.getPartials().get(i).getPoints().get(j).getTime();
-					sf.getPartials().get(i).getPoints().get(j).getFrequency();
-					sf.getPartials().get(i).getPoints().get(j).getAmplitude();
-					
-				}
-			}
+
+					out.write(String.format(l,"%.6f ",sf.getPartials().get(i).getPoints().get(j).getTime()));
+					out.write(String.format(l,"%.6f ",sf.getPartials().get(i).getPoints().get(j).getFrequency()));
 			
+					if(j == sf.getPartials().get(i).getNumberOfPoints()-1)
+						out.write(String.format(l,"%.6f",sf.getPartials().get(i).getPoints().get(j).getAmplitude()));
+					else
+						out.write(String.format(l,"%.6f ",sf.getPartials().get(i).getPoints().get(j).getAmplitude()));
+				}
+				
+				out.newLine();
+			}
+			out.close();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		//System.out.format("%.6f%n", Double.parseDouble(in.next()));
-
 	}
 	
 }
