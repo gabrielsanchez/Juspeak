@@ -16,13 +16,16 @@
  */
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Scanner;
+
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
 
 /**
  * IO.java
@@ -133,5 +136,21 @@ public class IO{
 			e.printStackTrace();
 		}
 	}
+	
+	public void saveMidiFile(Sequence sequence, String filename){
+  	  
+    	int[] allowedTypes = MidiSystem.getMidiFileTypes(sequence);
+        if (allowedTypes.length == 0) {
+            System.err.println("Midi Output Error");
+        }
+        else {
+            try {
+				MidiSystem.write(sequence, allowedTypes[0], new File(filename));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            System.exit(0);
+        } 	  
+    }
 	
 }
