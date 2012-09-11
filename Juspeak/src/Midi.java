@@ -41,6 +41,9 @@ public class Midi {
     public Sequencer sequencer;
     public Sequence sequence;
 
+    /**
+     * Constructor
+     */
     public Midi() {
     	try {
     		sequencer = MidiSystem.getSequencer();
@@ -48,10 +51,14 @@ public class Midi {
         } catch (MidiUnavailableException e) {
         	e.printStackTrace();
         }
-        createTrack();
+        sequence = createSequence(8);
+        track = sequence.createTrack();
         startSequencer();
-      }
+    }
 
+    /**
+     * Start the Sequencer
+     */
     public void startSequencer() {
     	try {
     		sequencer.setSequence(sequence);
@@ -60,8 +67,44 @@ public class Midi {
         }
         sequencer.setTempoInBPM(60);
         sequencer.start();
-      }
+    }
 
+    /**
+     * Create a sequence
+     * @param ppq
+     * @return
+     */
+    public Sequence createSequence(int ppq){
+    	//int ppq = 8;
+    	try{
+			Sequence s = new Sequence(Sequence.PPQ, ppq);
+			return s;
+		} catch (InvalidMidiDataException e) {
+			e.printStackTrace();
+		}
+		return null;
+    }
+
+    /**
+     * Create a track
+     * @param seq
+     * @return t
+     */
+    public Track createTrack(Sequence seq){
+    	Track t = seq.createTrack();
+    	return t;
+    }
+    
+    /**
+     * Create a track
+     * @return t
+     */
+    public Track createTrack(){
+    	Track t = sequence.createTrack();
+    	return t;
+    }
+    
+/*    
     public void createTrack() {
         try {
           sequence = new Sequence(Sequence.PPQ, 8);
@@ -70,19 +113,85 @@ public class Midi {
         }
         track = sequence.createTrack();
     }
-
-    public void startNote(int note, int ch, int tick) {
-    	  setShortMessage(ShortMessage.NOTE_ON, note, ch, tick);
+*/
+    /**
+     * Send a Start Note Message
+     * @param tr
+     * @param note
+     * @param ch
+     * @param tick
+     * @param vel
+     */
+    public void startNote(Track tr, int note, int ch, int tick, int vel) {
+    	  addShortMessage(tr, ShortMessage.NOTE_ON, note, ch, tick, vel);
     }
 
-    public void stopNote(int note, int ch, int tick) {
-    	  setShortMessage(ShortMessage.NOTE_OFF, note, ch, tick);
+    /**
+     * Send a Stop Note Message
+     * @param tr
+     * @param note
+     * @param ch
+     * @param tick
+     * @param vel
+     */
+    public void stopNote(Track tr, int note, int ch, int tick, int vel) {
+    	  addShortMessage(tr, ShortMessage.NOTE_OFF, note, ch, tick, vel);
     }
 
-    public void setShortMessage(int onOrOff, int ch, int note, int tick) {
+    /**
+     * Send a Start Note Message
+     * @param note
+     * @param ch
+     * @param tick
+     * @param vel
+     */
+    public void startNote(int note, int ch, int tick, int vel) {
+    	  addShortMessage(ShortMessage.NOTE_ON, note, ch, tick, vel);
+    }
+
+    /**
+     * Send a Stop Note Message
+     * @param note
+     * @param ch
+     * @param tick
+     * @param vel
+     */
+    public void stopNote(int note, int ch, int tick, int vel) {
+    	  addShortMessage(ShortMessage.NOTE_OFF, note, ch, tick, vel);
+    }
+    
+    /**
+     * Add a Short Message to a track
+     * @param tr
+     * @param onOrOff
+     * @param ch
+     * @param note
+     * @param tick
+     * @param vel
+     */
+    public void addShortMessage(Track tr, int onOrOff, int ch, int note, int tick, int vel) {
     	ShortMessage message = new ShortMessage();
         try {
-        	message.setMessage(onOrOff, note, ch, 90);
+        	message.setMessage(onOrOff, ch, note, vel);
+        	MidiEvent event = new MidiEvent(message, tick);
+        	tr.add(event);
+        } catch (InvalidMidiDataException e) {
+        	e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Add a Short Message to a track
+     * @param onOrOff
+     * @param ch
+     * @param note
+     * @param tick
+     * @param vel
+     */
+    public void addShortMessage(int onOrOff, int note, int ch, int tick, int vel) {
+    	ShortMessage message = new ShortMessage();
+        try {
+        	message.setMessage(onOrOff, ch, note, vel);
         	MidiEvent event = new MidiEvent(message, tick);
         	track.add(event);
         } catch (InvalidMidiDataException e) {
@@ -90,8 +199,13 @@ public class Midi {
         }
     }
       
-      
-      public void Add(int[]key, int[]dur){
+    
+    /**
+     * Add keys with respective durations.
+     * @param key
+     * @param dur
+     */
+    public void Add(int[]key, int[]dur){
     	  int k;
       		int d;
       	int i = 0;
@@ -116,143 +230,125 @@ public class Midi {
       
       
       
-      /**
-       * Converts a String to a Byte Array
-       * @param str
-       * @return bA
-       */
-      public byte [] stringToByteArray(String str){
+    /**
+     * Converts a String to a Byte Array
+     * @param str
+     * @return bA
+     */
+    public byte [] stringToByteArray(String str){
 
-    	    byte [] bA = new byte [str.length()];
-    	    byte bV;
-    	    for(int k = 0; k < str.length(); k++){
-        	    char c = str.charAt(k);
+    	byte [] bA = new byte [str.length()];
+    	byte bV;
+    	for(int k = 0; k < str.length(); k++){
+    		char c = str.charAt(k);
         	//Mac extended Ascii:    
-				switch(c){ 
-					case '‡': bV = (byte) 135; break;
-					case 'Ž': bV = (byte) 142; break;
-					case '’': bV = (byte) 146; break;
-					case '—': bV = (byte) 151; break;
-					case 'œ': bV = (byte) 156; break;
-					case '–': bV = (byte) 150; break;
-					case 'ç': bV = (byte) 231; break;
-					case 'ƒ': bV = (byte) 131; break;
-					case 'ê': bV = (byte) 234; break;
-					case 'î': bV = (byte) 238; break;
-					case 'ò': bV = (byte) 242; break;
-					case '„': bV = (byte) 132; break;
+			switch(c){ 
+				case '‡': bV = (byte) 135; break;
+				case 'Ž': bV = (byte) 142; break;
+				case '’': bV = (byte) 146; break;
+				case '—': bV = (byte) 151; break;
+				case 'œ': bV = (byte) 156; break;
+				case '–': bV = (byte) 150; break;
+				case 'ç': bV = (byte) 231; break;
+				case 'ƒ': bV = (byte) 131; break;
+				case 'ê': bV = (byte) 234; break;
+				case 'î': bV = (byte) 238; break;
+				case 'ò': bV = (byte) 242; break;
+				case '„': bV = (byte) 132; break;
 	
-				    default: bV = (byte) c;
+			    default: bV = (byte) c;
 				}
 				bA[k] = bV;
-    	    }    	    
-    	    return bA;    	  
-      }
+    	}    	    
+    	return bA;    	  
+    }
       
-      /**
-       * Set the text at the specified position.
-       * @param s
-       * @param position
-       */
-      public void setText(String s, int position){
-    	  byte [] m = stringToByteArray(s);
-    	  metaMessage((byte)0x01,m, position);
-      }
+    /**
+     * Set the text at the specified position.
+     * @param s
+     * @param position
+     */
+    public void setText(String s, int position){
+    	byte [] m = stringToByteArray(s);
+    	metaMessage((byte)0x01,m, position);
+    }
       
-      /**
-       * Sets lyrics at the specified position.
-       * @param s
-       * @param position
-       */
-      public void setLyrics(String s, int position){
-    	  byte [] m = stringToByteArray(s);
-    	  metaMessage((byte)0x05,m, position);
-      }
+    /**
+     * Sets lyrics at the specified position.
+     * @param s
+     * @param position
+     */
+    public void setLyrics(String s, int position){
+    	byte [] m = stringToByteArray(s);
+    	metaMessage((byte)0x05,m, position);
+    }
       
-      /**
-       * Sets a Market at the specified position.
-       * @param s
-       * @param position
-       */
-      public void setMarker(String s, int position){
-    	  byte [] m = stringToByteArray(s);
-    	  metaMessage((byte)0x06,m, position);
-      }
+    /**
+     * Sets a Marker at the specified position.
+     * @param s
+     * @param position
+     */
+    public void setMarker(String s, int position){
+    	byte [] m = stringToByteArray(s);
+  	  	metaMessage((byte)0x06,m, position);
+  	}
       
-      /**
-       * Sets a Cue Point at the specified position.
-       * @param s
-       * @param position
-       */
-      public void setCuePoint(String s, int position){
-    	  byte [] m = stringToByteArray(s);
-    	  metaMessage((byte)0x07,m, position);
-      }
+    /**
+     * Sets a Cue Point at the specified position.
+     * @param s
+     * @param position
+     */
+    public void setCuePoint(String s, int position){
+    	byte [] m = stringToByteArray(s);
+    	metaMessage((byte)0x07,m, position);
+    }
       
-      /**
-       * Sets tempo at the specified position. (DEBUG)
-       * @param BPM
-       * @param position
-       */
-      public void setTempo(int BPM, int position){
-    	  int ms = 60000000/BPM;
-    	  String hx = Integer.toHexString(ms);
+    /**
+     * Sets tempo at the specified position. (DEBUG)
+     * @param BPM
+     * @param position
+     */
+    public void setTempo(int BPM, int position){
+    	int ms = 60000000/BPM;
+    	String hx = Integer.toHexString(ms);
     	//  Byte.decode(hx);
-    	  Byte.parseByte(hx, 8);
+    	Byte.parseByte(hx, 8);
     	
-    	  System.out.println(ms);
-    	 // metaMessage((byte)0x07,m, position);
-      }
+    	System.out.println(ms);
+    	// metaMessage((byte)0x07,m, position);
+    }
       
-      /**
-       * Adds a Meta Message to the track.
-       * @param type
-       * @param m
-       * @param pos
-       */
-      public void metaMessage(byte type, byte[] m, int pos) {
-		  MetaMessage message = new MetaMessage();	  
-		  try {
-		    message.setMessage(type, m, m.length);
+    /**
+     * Adds a Meta Message to the track.
+     * @param type
+     * @param m
+     * @param pos
+     */
+    public void metaMessage(byte type, byte[] m, int pos) {
+		MetaMessage message = new MetaMessage();	  
+		try {
+			message.setMessage(type, m, m.length);
 		    MidiEvent event = new MidiEvent(message, pos);
 		    track.add(event);
 			  
-		  } catch (InvalidMidiDataException e) {
+		} catch (InvalidMidiDataException e) {
 		    e.printStackTrace();
-		  }
-	  }
+		}
+	}
 
-      public void Chord(int i, int ch, int d, int key, int key3rd,int key5th, int key8va ) {
-    	      
-          startNote(key, ch, i);
-          startNote(key3rd , ch, i);
-          startNote(key5th , ch, i);
-          startNote(key8va, ch, i);
-          stopNote(key, ch, i + d);
-          stopNote(key3rd, ch, i + d);
-          stopNote(key5th, ch, i + d);
-          stopNote(key8va, ch, i + d);
-         
-      }
-      
-      public void Arpeggio(int i, int ch, int d, int key, int key3rd,int key5th, int key8va) {
-	      
-    	  startNote(key, ch, i);
-    	  startNote(key3rd, ch, i+1);
-    	  startNote(key5th,ch, i+2);
-    	  startNote(key8va,ch, i+3);
-    	  stopNote(key,ch, i+4);
-    	  stopNote(key3rd,ch, i+4);
-    	  stopNote(key5th,ch, i+4);
-    	  stopNote(key8va,ch, i+4);
-      }
 
-      
-      public void saveFile(String filename) throws IOException{
-    	  startSequencer();
-          MidiSystem.write(sequence, MidiSystem.getMidiFileTypes(sequence)[0], new File(filename));
-          System.exit(0);
-          	  
-      }
+
+    /**
+     * Saves a file with the given filename.  
+     * @param filename
+     */
+    public void saveFile(String filename){
+    	startSequencer();
+        try {
+			MidiSystem.write(sequence, MidiSystem.getMidiFileTypes(sequence)[0], new File(filename));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
 }
