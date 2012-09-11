@@ -1,6 +1,5 @@
-import java.io.IOException;
-
 import javax.sound.midi.Sequence;
+import javax.sound.midi.Track;
 
 
 public class Test {
@@ -18,11 +17,19 @@ public class Test {
 		
         Midi m = new Midi();
         String filename = "prueba3.mid";
-        m.setLyrics("La-", 0);
+       // m.setLyrics("La-", 3);
         //m.setTempo(120,0);
        
-        m.startNote(60, 1, 1, 90);
-        m.stopNote(60, 1, 8, 90);
+        m.startNote(60, 1, 0, 90);
+        m.stopNote(60, 1, 75, 90);
+        m.startNote(64, 1, 1000, 90);
+        m.stopNote(64, 1, 3000, 90);
+        
+
+        
+     //   Track nt = m.createTrack();
+     //   m.startNote(nt, 90, 1, 4, 120);
+     //   m.stopNote(nt, 90, 1, 12, 120);
         
         m.saveFile(filename);
 

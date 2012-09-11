@@ -51,9 +51,9 @@ public class Midi {
         } catch (MidiUnavailableException e) {
         	e.printStackTrace();
         }
-        sequence = createSequence(8);
+        sequence = createSequence(24);
         track = sequence.createTrack();
-        startSequencer();
+        //startSequencer();
     }
 
     /**
@@ -77,7 +77,7 @@ public class Midi {
     public Sequence createSequence(int ppq){
     	//int ppq = 8;
     	try{
-			Sequence s = new Sequence(Sequence.PPQ, ppq);
+			Sequence s = new Sequence(Sequence.SMPTE_24, 24);
 			return s;
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
@@ -169,7 +169,7 @@ public class Midi {
      * @param tick
      * @param vel
      */
-    public void addShortMessage(Track tr, int onOrOff, int ch, int note, int tick, int vel) {
+    public void addShortMessage(Track tr, int onOrOff, int note, int ch, int tick, int vel) {
     	ShortMessage message = new ShortMessage();
         try {
         	message.setMessage(onOrOff, ch, note, vel);
@@ -349,6 +349,7 @@ public class Midi {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.exit(0);
     }
 
 }
