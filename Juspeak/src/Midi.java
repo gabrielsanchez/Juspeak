@@ -48,10 +48,11 @@ public class Midi {
     	try {
     		sequencer = MidiSystem.getSequencer();
     		sequencer.open();
+    		
         } catch (MidiUnavailableException e) {
         	e.printStackTrace();
         }
-        sequence = createSequence(24);
+        sequence = createSequence(960);
         track = sequence.createTrack();
         //startSequencer();
     }
@@ -65,7 +66,7 @@ public class Midi {
         } catch (InvalidMidiDataException e) {
         	e.printStackTrace();
         }
-        sequencer.setTempoInBPM(60);
+        //sequencer.setTempoInBPM(60);
         sequencer.start();
     }
 
@@ -77,7 +78,8 @@ public class Midi {
     public Sequence createSequence(int ppq){
     	//int ppq = 8;
     	try{
-			Sequence s = new Sequence(Sequence.SMPTE_24, 24);
+			//Sequence s = new Sequence(Sequence.SMPTE_24, 24);
+    		Sequence s = new Sequence(Sequence.PPQ, 480);
 			return s;
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
@@ -204,10 +206,12 @@ public class Midi {
      * Add keys with respective durations.
      * @param key
      * @param dur
+     * @param ch
+     * @param vel
      */
-    public void Add(int[]key, int[]dur){
-    	  int k;
-      		int d;
+    public void Add(int[]key, int[]dur, int ch, int vel){
+    	int k;
+      	int d;
       	int i = 0;
       	
       	for(int x = 0; x < key.length; x++){
@@ -217,13 +221,35 @@ public class Midi {
       		
       		if(k==-1){
       			i = i+d;
-      		
       		}else{
+      			startNote(k, ch, i, vel);
+      			stopNote(k, ch, i+d, vel);
+      			i = i+d;
+      		}
+      	}	
+      }
+    
+    /**
+     * Add keys with respective durations.
+     * @param key
+     * @param dur
+     */
+    public void Add(int[]key, int[]dur){
+    	int k;
+      	int d;
+      	int i = 0;
+      	
+      	for(int x = 0; x < key.length; x++){
       		
-      			//startNote(k, i, 11, 0);
-        	  	//stopNote(k, i+d,11, 0);
-        	  		i = i+d;
+      		k = key[x];
+      		d = dur[x];	
       		
+      		if(k==-1){
+      			i = i+d;
+      		}else{
+      			startNote(k, 0, i, 90);
+      			stopNote(k, 0, i+d, 90);
+      			i = i+d;
       		}
       	}	
       }
@@ -257,7 +283,7 @@ public class Midi {
 				case '„': bV = (byte) 132; break;
 	
 			    default: bV = (byte) c;
-				}
+			}
 				bA[k] = bV;
     	}    	    
     	return bA;    	  
@@ -335,8 +361,6 @@ public class Midi {
 		    e.printStackTrace();
 		}
 	}
-
-
 
     /**
      * Saves a file with the given filename.  

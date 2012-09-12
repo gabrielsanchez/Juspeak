@@ -1,12 +1,10 @@
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
 
-
 public class Test {
 	
 	public static double random(double max, double min){
-		return min + (Math.random() * ((max - min) + 1));
-		
+		return min + (Math.random() * ((max - min) + 1));	
 	}
 	
 	public static double[] getFrequencies(SpearFile sf, int partial){
@@ -16,14 +14,13 @@ public class Test {
 	public static void main(String[] args){
 		
         Midi m = new Midi();
-        String filename = "prueba3.mid";
+        String filename = "prueba6.mid";
        // m.setLyrics("La-", 3);
         //m.setTempo(120,0);
-       
-        m.startNote(60, 1, 0, 90);
-        m.stopNote(60, 1, 75, 90);
-        m.startNote(64, 1, 1000, 90);
-        m.stopNote(64, 1, 3000, 90);
+       //480 -> 240 -> 120 -> 60 -> 30 ->15
+        m.startNote(60, 1, 1, 90);
+        m.stopNote(60, 1, 480, 90);
+
         
 
         
